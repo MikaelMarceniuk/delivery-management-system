@@ -1,0 +1,8 @@
+{
+  "name": "delivery-management-system",
+  "version": "1.0.0",
+  "author": "Mikael Marceniuk",
+  "license": "MIT",
+  "private": true,
+	"workspaces": ["apps/**/*"]
+}
