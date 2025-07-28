@@ -23,7 +23,6 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form'
-import { useRouter } from 'next/navigation'
 
 export const signUpSchema = z
   .object({

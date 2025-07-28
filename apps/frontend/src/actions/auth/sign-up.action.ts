@@ -1,3 +1,5 @@
+'use client'
+
 import api from '@/src/lib/axios'
 import { FormattedApiError } from '@/src/types/formated-api-error.type'
 import { handleApiError } from '@/src/utils/handleApiError'
