@@ -1,7 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { SignInDTO } from './dto/sign-in.dto';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
+import { SessionTokenGuard } from 'src/http/guards/session-token.guard';
+import { CurrentUser } from 'src/http/decorators/current-user.decorator';
+import { User } from '@prisma/client';
+import { UserPresenter } from '../user/presenter/user.presenter';
 
 @Controller('auth')
 export class AuthController {
@@ -36,5 +40,11 @@ export class AuthController {
     });
 
     res.status(200);
+  }
+
+  @UseGuards(SessionTokenGuard)
+  @Get('/session')
+  getSession(@CurrentUser() user: User) {
+    return new UserPresenter(user);
   }
 }
