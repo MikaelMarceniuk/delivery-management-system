@@ -8,7 +8,7 @@ const sidebarItems = [
   },
   {
     title: 'Motoristas',
-    url: '#',
+    url: '/drivers',
     icon: Truck,
   },
   {
