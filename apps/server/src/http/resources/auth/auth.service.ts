@@ -15,6 +15,8 @@ import {
   daysToSeconds,
   minutesToSeconds,
 } from 'src/utils/time.utils';
+import { Session } from '@prisma/client';
+import { RefreshTokenPresenter } from './presenters/refresh-token.presenter';
 
 @Injectable()
 export class AuthService {
@@ -73,6 +75,38 @@ export class AuthService {
     } catch (err) {
       if (err instanceof UnauthorizedException) throw err;
 
+      throw new InternalServerErrorException(
+        'Erro interno ao tentar fazer login',
+      );
+    }
+  }
+
+  async refreshSessionToken(session: Session) {
+    try {
+      // Gera tokens
+      const payload = { sub: session.userId };
+      const now = new Date();
+
+      const sessionTokenExpiresAt = addMinutes(now, 15);
+      const sessionToken = await this.jwtService.signAsync(payload, {
+        expiresIn: minutesToSeconds(15),
+      });
+
+      // Gera Hash dos tokens
+      const salts = await genSalt(10);
+      const sessionTokenHash = await hash(sessionToken, salts);
+
+      // Salva session
+      await this.sessionRepository.update({
+        id: session.id,
+        sessionTokenHash,
+      });
+
+      return new RefreshTokenPresenter({
+        sessionToken,
+        sessionTokenExpiresAt,
+      });
+    } catch (err) {
       throw new InternalServerErrorException(
         'Erro interno ao tentar fazer login',
       );
