@@ -13,13 +13,11 @@ type SessionContextType = {
   isLoading: boolean
 }
 
-const SessionContext = createContext<SessionContextType>({
+export const SessionContext = createContext<SessionContextType>({
   user: undefined,
   isAuthenticated: false,
   isLoading: true,
 })
-
-export const useSession = () => useContext(SessionContext)
 
 const oneMinute = 1 * 60 * 1000
 
